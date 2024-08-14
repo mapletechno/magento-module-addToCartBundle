@@ -1,0 +1,30 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\Widget\NewWidget $block */
+/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $_productCollection */
+$_productCollection = $block->getProductCollection();
+?>
+
+<div class="products-grid grid">
+    <?php if ($_productCollection->getSize()): ?>
+        <?php foreach ($_productCollection as $_product): ?>
+            <?php /** @var \Magento\Catalog\Model\Product $_product */ ?>
+            <div class="product-item">
+                <!-- Product Details -->
+                <div class="product-name">
+                    <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $_product->getName() ?></a>
+                </div>
+                
+                <!-- Custom Add to Cart Button for Bundle Products -->
+                <?php if ($_product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE): ?>
+                    <button type="button" class="action primary bundle-add-to-cart"
+                        onclick="require('Ahmed_Bundle/js/bundle-add-to-cart').call(this, '<?php echo $_product->getId(); ?>')">
+                        <?php echo __('Add to Cart') ?>
+                    </button>
+                <?php else: ?>
+                    <!-- Default Add to Cart for Other Products -->
+                    <?php echo $block->getAddToCartHtml($_product); ?>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
