@@ -1,0 +1,67 @@
+<?php $_product = $block->getProduct(); ?>
+<?php $buttonTitle = __('Add to Cart'); ?>
+<?php if ($_product->isSaleable()): ?>
+<div class="box-tocart">
+    <form data-role="tocart-form" action="<?php echo $block->getSubmitUrl($_product) ?>" method="post" enctype="multipart/form-data">
+        <div class="fieldset">
+            <?php if ($block->shouldRenderQuantity()): ?>
+            <div class="field qty">
+                <label class="label" for="qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
+                <div class="control">
+                    <input type="number"
+                           name="qty"
+                           id="qty"
+                           maxlength="12"
+                           value="<?php /* @escapeNotVerified */ echo $block->getProductDefaultQty() * 1 ?>"
+                           title="<?php /* @escapeNotVerified */ echo __('Qty') ?>" class="input-text qty"
+                           data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>"
+                           />
+                </div>
+            </div>
+            <?php endif; ?>
+              
+            <!-- Include product options -->
+            <?php echo $block->getChildHtml('product.info.options'); ?>
+
+            <!-- Display bundle options -->
+            <?php if ($_product->getTypeId() == \Magento\Bundle\Model\Product\Type::TYPE_CODE): ?>
+                <?php
+                $bundleOptions = $_product->getTypeInstance()->getOptionsCollection($_product);
+                $bundleSelections = $_product->getTypeInstance()->getSelectionsCollection($bundleOptions->getAllIds(), $_product);
+                ?>
+                <div class="bundle-options">
+                    <?php foreach ($bundleOptions as $option): ?>
+                        <div class="bundle-option">
+                            <label><?php echo $option->getDefaultTitle(); ?></label>
+                            <select name="bundle_option[<?php echo $option->getOptionId(); ?>]">
+                                <?php foreach ($bundleSelections as $selection): ?>
+                                    <?php if ($selection->getOptionId() == $option->getOptionId()): ?>
+                                        <option value="<?php echo $selection->getSelectionId(); ?>">
+                                            <?php echo $selection->getName(); ?>
+                                        </option>
+                                        <!-- Debug output -->
+                                        <div>
+                                            <strong>Option ID:</strong> <?php echo $option->getOptionId(); ?><br>
+                                            <strong>Selection ID:</strong> <?php echo $selection->getSelectionId(); ?><br>
+                                            <strong>Selection Name:</strong> <?php echo $selection->getName(); ?><br>
+                                            <strong>Is Required:</strong> <?php echo $option->getRequired() ? 'Yes' : 'No'; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            <!-- End bundle options -->
+
+            <br>
+            <div class="actions">
+                <button type="submit" title="<?php echo $buttonTitle ?>" class="action primary tocart">
+                    <span><?php echo $buttonTitle ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<?php endif; ?>
