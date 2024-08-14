@@ -1,0 +1,23 @@
+<?php
+/** @var \Magento\Catalog\Model\Product $product */
+$product = $block->getProduct();
+?>
+
+<?php if ($product): ?>
+    <button type="button" title="<?= __('Add to Cart') ?>" class="action tocart primary">
+        <span><?= __('Add to Cart') ?></span>
+    </button>
+
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Ahmed_Bundle/js/view/bundle-product": {
+                "isBundle": true,
+                "productId": "<?= /* @escapeNotVerified */ $block->escapeHtmlAttr($product->getId()) ?>"
+            }
+        }
+    }
+    </script>
+<?php else: ?>
+    <p><?= __('Product data is not available.') ?></p>
+<?php endif; ?>
