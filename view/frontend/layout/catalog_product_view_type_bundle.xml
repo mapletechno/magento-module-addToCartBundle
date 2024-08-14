@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<!-- Remove the default add to cart block for bundle products -->
+		<referenceBlock name="product.info.addtocart" remove="true"/>
+        <referenceBlock name="customize.button" remove="true" />
+<!-- Add a new block for the custom add to cart button -->
+		<referenceContainer name="product.info.main">
+			<block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.custom" template="Ahmed_Bundle::product/view/addtocart.phtml" />
+		</referenceContainer>
+	</body>
+</page>
